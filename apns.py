@@ -138,8 +138,11 @@ class APNsConnection(object):
         return self._connection().read(n)
 
     def write(self, string):
-        return self._connection().write(string)
-
+        try:
+            return self._connection().write(string)
+        except IOError,  e:
+            self._ssl = None
+            return self._connection().write(string)
 
 class PayloadAlert(object):
     def __init__(self, body, action_loc_key=None, loc_key=None,
