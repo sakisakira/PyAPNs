@@ -173,11 +173,12 @@ class PayloadTooLargeError(Exception):
 
 class Payload(object):
     """A class representing an APNs message payload"""
-    def __init__(self, alert=None, badge=None, sound=None, custom={}):
+    def __init__(self, alert=None, badge=None, sound=None, content=None, custom={}):
         super(Payload, self).__init__()
         self.alert = alert
         self.badge = badge
         self.sound = sound
+        self.content = content
         self.custom = custom
         self._check_size()
 
@@ -195,6 +196,8 @@ class Payload(object):
             d['sound'] = self.sound
         if self.badge is not None:
             d['badge'] = int(self.badge)
+        if self.content is not None:
+            d['content-available'] = int(self.content)
 
         d = { 'aps': d }
         d.update(self.custom)
